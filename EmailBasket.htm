@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Email Basket</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+        <style>
+            html, body {
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                font-family: Lexend, Arial, Helvetica, sans-serif;
+            }
+            main {
+                padding: 8px;
+                height: 100%;
+                width: 100%;
+                overflow: auto;
+            }
+            .basket {
+                margin-left: calc(50% - 400px - 16px);
+                margin-top: 60px;
+                margin-bottom: 40px;
+                width: 800px;
+                padding: 16px;
+                background-color: white;
+                filter: drop-shadow(0px 0px 20px #000000);
+                border-radius: 20px;
+            }
+            hr {
+                border-width: 1px;
+                opacity: 0.5;
+            }
+            h1, h2, h3, p {
+                margin: 0px;
+            }
+            .cpl {
+                text-align: center;
+            }
+            .redact {
+                background-color: black;
+            }
+            .none {
+                color: rgb(73, 73, 73);
+                font-style: italic;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <h1 style='text-align: center;'>Email Basket</h1>
+            <div class='basket'>
+                <p>To: <span id='to-n'>Recepient</span> (<span id='to'>to@example.com</span>)</p>
+                <p>From: <span id='from-n'>Sender</span> (<span id='from'>from@example.com</span>)</p>
+                <p>CC: <span id='cc'><span class='none'>(None)</span></span></p>
+                <p>Subject: <span id='subject'></span></p>
+                <hr />
+                <div class='body' contenteditable>
+                    This is the email body.
+                </div>
+            </div>
+            <div class='cpl'>
+                <p>
+                    Recepient Name:
+                    <input onpaste='rname(this.value)' onchange='rname(this.value)' onkeyup='rname(this.value)' value='Recepient' />
+                    <button onclick='rncensor(this)'>Redact</button>
+                </p>
+                <p>
+                    Recepient Email:
+                    <input onpaste='raddress(this.value)' onchange='raddress(this.value)' onkeyup='raddress(this.value)' value='to@example.com' />
+                    <button onclick='racensor(this)'>Redact</button>
+                </p>
+                <p>
+                    Sender Name:
+                    <input onpaste='sname(this.value)' onchange='sname(this.value)' onkeyup='sname(this.value)' value='Sender' />
+                    <button onclick='fncensor(this)'>Redact</button>
+                </p>
+                <p>
+                    Sender Email:
+                    <input onpaste='saddress(this.value)' onchange='saddress(this.value)' onkeyup='saddress(this.value)' value='from@example.com' />
+                    <button onclick='facensor(this)'>Redact</button>
+                </p>
+                <p>
+                    Subject:
+                    <input onpaste='sub(this.value)' onchange='sub(this.value)' onkeyup='sub(this.value)' value='from@example.com' />
+                </p>
+                <p>Save it: <button onclick='shot();'>Screenshot</button></p>
+            </div>
+        </main>
+        <script src='https://html2canvas.hertzen.com/dist/html2canvas.min.js'></script>
+        <script>
+            function sub(v) {
+                document.getElementById('subject').innerText = v;
+            }
+            function rname(v) {
+                document.getElementById('to-n').innerText = v;
+            }
+            function raddress(v) {
+                document.getElementById('to').innerText = v;
+            }
+            function sname(v) {
+                document.getElementById('from-n').innerText = v;
+            }
+            function saddress(v) {
+                document.getElementById('from').innerText = v;
+            }
+            function rncensor(e) {
+                e.innerText = e.innerText === 'Unredact' ? 'Redact' : 'Unredact';
+                document.getElementById('to-n').classList.toggle('redact');
+            }
+            function racensor(e) {
+                e.innerText = e.innerText === 'Unredact' ? 'Redact' : 'Unredact';
+                document.getElementById('to').classList.toggle('redact');
+            }
+            function fncensor(e) {
+                e.innerText = e.innerText === 'Unredact' ? 'Redact' : 'Unredact';
+                document.getElementById('from-n').classList.toggle('redact');
+            }
+            function facensor(e) {
+                e.innerText = e.innerText === 'Unredact' ? 'Redact' : 'Unredact';
+                document.getElementById('from').classList.toggle('redact');
+            }
+            function shot() {
+                html2canvas(document.querySelector('.basket')).then(function (canvas) {
+                    var a = document.createElement('a');
+                    a.download = 'screenshot.png';
+                    a.href = canvas.toDataURL('image/png');
+                    a.click();
+                });
+            }
+        </script>
+    </body>
+</html>
